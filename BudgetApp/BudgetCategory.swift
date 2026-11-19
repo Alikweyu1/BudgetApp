@@ -32,3 +32,4 @@ struct Expense: Identifiable, Equatable {
     let amount: Double
     let date: Date
 }
+

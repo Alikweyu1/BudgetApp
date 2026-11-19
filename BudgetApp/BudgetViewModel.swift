@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Combine
 
 @MainActor
 final class BudgetViewModel: ObservableObject {
@@ -24,7 +25,36 @@ final class BudgetViewModel: ObservableObject {
         let now = Date()
         selectedMonth = Calendar.current.component(.month, from: now)
         selectedYear = Calendar.current.component(.year, from: now)
+        seedSamplesIfNeeded()
         load()
+    }
+
+    private func seedSamplesIfNeeded() {
+        let key = "didSeedSampleTransactions"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        UserDefaults.standard.set(true, forKey: key)
+
+        let samples: [(String, BudgetCategory, Double, Int, Int)] = [
+            ("Java House", .food, 5000, 11, 40),
+            ("Zara", .clothing, 2000, 11, 50),
+            ("all Fees", .fees, 500, 11, 56),
+            ("Train", .transport, 6000, 11, 57),
+            ("mitumba", .clothing, 1500, 12, 2),
+            ("KFC Chicken", .food, 2000, 12, 3)
+        ]
+
+        for sample in samples {
+            var parts = calendar.dateComponents([.year, .month, .day], from: Date())
+            parts.hour = sample.3
+            parts.minute = sample.4
+            let entity = ExpenseEntity(context: persistence.context)
+            entity.id = UUID()
+            entity.name = sample.0
+            entity.category = sample.1.rawValue
+            entity.amount = sample.2
+            entity.date = calendar.date(from: parts) ?? Date()
+        }
+        persistence.save()
     }
 
     var monthName: String {
