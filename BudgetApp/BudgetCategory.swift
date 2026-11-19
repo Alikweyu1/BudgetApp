@@ -3,7 +3,6 @@
 //  BudgetApp
 //
 //  Created by AKWEYU on 19/11/2026.
-//
 
 import SwiftUI
 
@@ -12,6 +11,8 @@ enum BudgetCategory: String, CaseIterable, Identifiable {
     case transport = "Transport & Fuel"
     case clothing = "Clothing"
     case fees = "Transaction Fees"
+
+    static let allCases: [BudgetCategory] = [.food, .transport, .clothing, .fees]
 
     var id: String { rawValue }
 
@@ -32,4 +33,3 @@ struct Expense: Identifiable, Equatable {
     let amount: Double
     let date: Date
 }
-
