@@ -140,7 +140,6 @@ struct HomeView: View {
         .frame(height: vm.totalSpend <= 0 ? 0 : 28)
         .animation(.easeInOut, value: vm.totalSpend)
     }
-
     private var transactionsSection: some View {
         VStack(spacing: 12) {
             HStack {
